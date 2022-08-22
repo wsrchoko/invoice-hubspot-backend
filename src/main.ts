@@ -23,7 +23,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .addBearerAuth()
     .setTitle('Hubspot')
     .setVersion('1.0.0')
     .build();
