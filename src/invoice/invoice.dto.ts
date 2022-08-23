@@ -20,6 +20,11 @@ export class Invoice {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
+  readonly logo: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   readonly no: string;
 
   @IsDate()
