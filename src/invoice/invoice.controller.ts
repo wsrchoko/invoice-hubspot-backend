@@ -1,4 +1,5 @@
-import { Body, Post, Controller } from '@nestjs/common';
+import { Response } from 'express';
+import { Body, Post, Controller, Res } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 //
 import { InvoiceService } from './invoice.service';
@@ -11,8 +12,15 @@ export class InvoiceController {
 
   @Post()
   @ApiOkResponse({ description: '', type: InvoiceSuccess })
-  async generate(@Body() invoice: Invoice) {
-    await this._InvoiceService.generate(invoice);
-    return invoice;
+  async generate(@Body() invoice: Invoice, @Res() res: Response) {
+    const buffer = await this._InvoiceService.generate(invoice);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=invoice.pdf`,
+      'Content-Length': buffer.length
+    });
+
+    res.end(buffer);
   }
 }
