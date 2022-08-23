@@ -3,6 +3,8 @@ export interface Invoice {
   no?: string;
   date?: Date;
   dueDate?: Date;
+  headers: string[];
+  items: Item[];
   subtotal?: number;
   tax?: number;
   discount?: number;
@@ -29,4 +31,11 @@ export interface ClientCompany {
   address?: string;
   city?: string;
   country?: string;
+}
+
+export interface Item {
+  cell1?: string;
+  cell2?: string;
+  cell3?: string;
+  cell4?: string;
 }

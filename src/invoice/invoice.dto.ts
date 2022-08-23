@@ -1,17 +1,21 @@
 import {
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsObject,
   IsDate,
-  IsNumber,
+  IsArray,
   IsEmail,
+  IsNumber,
+  IsString,
+  IsObject,
+  IsNotEmpty,
+  IsOptional,
+  ArrayMinSize,
+  ArrayMaxSize,
   ValidateNested
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 //
 import {
+  Item as ItemType,
   YourCompany as YourCompanyType,
   ClientCompany as ClientCompanyType
 } from '../@types/invoice';
@@ -38,6 +42,19 @@ export class Invoice {
   @Type(() => Date)
   @ApiProperty({ required: false })
   readonly dueDate: Date;
+
+  @IsArray()
+  @ApiProperty()
+  @ArrayMinSize(4)
+  @ArrayMaxSize(4)
+  readonly headers: string[];
+
+  @IsArray()
+  @IsOptional()
+  @Type(() => Item)
+  @ValidateNested({ each: true })
+  @ApiProperty({ type: () => [Item], required: false })
+  readonly items: ItemType[];
 
   @IsNumber()
   @IsOptional()
@@ -144,6 +161,28 @@ export class ClientCompany {
   @IsOptional()
   @ApiProperty({ required: false })
   readonly country: string;
+}
+
+export class Item {
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  readonly cell1: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  readonly cell2: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  readonly cell3: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  readonly cell4: string;
 }
 
 export class InvoiceSuccess {}
