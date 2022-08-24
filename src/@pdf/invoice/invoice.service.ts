@@ -53,12 +53,14 @@ export class InvoicePDFService {
         total,
         notes,
         items,
-        headers,
         dueDate,
         subtotal,
         discount,
+        dateHeaders,
         yourCompany,
-        clientCompany
+        itemsHeaders,
+        clientCompany,
+        amountHeaders
       } = invoice;
 
       const content = [
@@ -70,63 +72,19 @@ export class InvoicePDFService {
                 { text: yourCompany.company, style: 'subtitle' },
                 { text: yourCompany.fullName, style: 'normal' },
                 { text: yourCompany.website, style: 'normal' },
-                {
-                  ...(yourCompany?.address && {
-                    text: yourCompany.address,
-                    style: 'normal'
-                  })
-                },
-                {
-                  ...(yourCompany?.city && {
-                    text: yourCompany.city,
-                    style: 'normal'
-                  })
-                },
-                {
-                  ...(yourCompany?.country && {
-                    text: yourCompany.country,
-                    style: 'normal'
-                  })
-                },
+                { text: yourCompany.address, style: 'normal' },
+                { text: yourCompany.city, style: 'normal' },
+                { text: yourCompany.country, style: 'normal' },
                 { text: yourCompany.phone, style: 'normal' },
                 { text: yourCompany.email, style: 'normal' }
               ],
               { text: '', style: 'title' },
               [
-                ...(clientCompany
-                  ? [
-                      {
-                        ...(clientCompany?.company && {
-                          text: clientCompany.company,
-                          style: 'subtitle'
-                        })
-                      },
-                      {
-                        ...(clientCompany?.fullName && {
-                          text: clientCompany.fullName,
-                          style: 'normal'
-                        })
-                      },
-                      {
-                        ...(clientCompany?.address && {
-                          text: clientCompany.address,
-                          style: 'normal'
-                        })
-                      },
-                      {
-                        ...(clientCompany?.city && {
-                          text: clientCompany.city,
-                          style: 'normal'
-                        })
-                      },
-                      {
-                        ...(clientCompany?.country && {
-                          text: clientCompany.country,
-                          style: 'normal'
-                        })
-                      }
-                    ]
-                  : [])
+                { text: clientCompany.company, style: 'subtitle' },
+                { text: clientCompany.fullName, style: 'normal' },
+                { text: clientCompany.address, style: 'normal' },
+                { text: clientCompany.city, style: 'normal' },
+                { text: clientCompany.country, style: 'normal' }
               ]
             ],
             [
@@ -154,13 +112,13 @@ export class InvoicePDFService {
                       body: [
                         [
                           {
-                            text: 'Invoice No:',
+                            text: dateHeaders[0],
                             style: 'normal',
                             alignment: 'right',
                             bold: true
                           },
                           {
-                            text: no ? no : '',
+                            text: no,
                             style: 'normal',
                             alignment: 'right',
                             bold: true
@@ -168,7 +126,7 @@ export class InvoicePDFService {
                         ],
                         [
                           {
-                            text: 'Invoice Date:',
+                            text: dateHeaders[1],
                             style: 'normal',
                             alignment: 'right',
                             bold: true
@@ -181,7 +139,7 @@ export class InvoicePDFService {
                         ],
                         [
                           {
-                            text: 'Due Date:',
+                            text: dateHeaders[2],
                             style: 'normal',
                             alignment: 'right',
                             bold: true
@@ -209,51 +167,47 @@ export class InvoicePDFService {
 
             body: [
               [
-                ...headers.map((header) => ({
+                ...itemsHeaders.map((header) => ({
                   text: header,
                   style: 'tableHeader',
                   border: [false, false, false, false],
                   margin: [0, 5, 0, 5]
                 }))
               ],
-              ...(items
-                ? [
-                    ...items.map(({ cell1, cell2, cell3, cell4 }, index) => [
-                      {
-                        text: cell1 ? cell1 : '',
-                        style: 'tableBody',
-                        border: [false, false, false, false],
-                        margin: [0, 5, 0, 5],
-                        ...(index % 2 && { fillColor: '#E0EFF6' }),
-                        ...(!cell1 && { color: '#7c98b6' })
-                      },
-                      {
-                        text: cell2 ? cell2 : '',
-                        style: 'tableBody',
-                        border: [false, false, false, false],
-                        margin: [0, 5, 0, 5],
-                        ...(index % 2 && { fillColor: '#E0EFF6' }),
-                        ...(!cell2 && { color: '#7c98b6' })
-                      },
-                      {
-                        text: cell3 ? cell3 : '0',
-                        style: 'tableBody',
-                        border: [false, false, false, false],
-                        margin: [0, 5, 0, 5],
-                        ...(index % 2 && { fillColor: '#E0EFF6' }),
-                        ...(!cell3 && { color: '#7c98b6' })
-                      },
-                      {
-                        text: cell4 ? cell4 : '$0.00',
-                        style: 'tableBody',
-                        border: [false, false, false, false],
-                        margin: [0, 5, 0, 5],
-                        ...(index % 2 && { fillColor: '#E0EFF6' }),
-                        ...(!cell4 && { color: '#7c98b6' })
-                      }
-                    ])
-                  ]
-                : [])
+              ...items.map(({ cell1, cell2, cell3, cell4 }, index) => [
+                {
+                  text: cell1,
+                  style: 'tableBody',
+                  border: [false, false, false, false],
+                  margin: [0, 5, 0, 5],
+                  ...(index % 2 && { fillColor: '#E0EFF6' }),
+                  ...(!cell1 && { color: '#7c98b6' })
+                },
+                {
+                  text: cell2,
+                  style: 'tableBody',
+                  border: [false, false, false, false],
+                  margin: [0, 5, 0, 5],
+                  ...(index % 2 && { fillColor: '#E0EFF6' }),
+                  ...(!cell2 && { color: '#7c98b6' })
+                },
+                {
+                  text: cell3 || '0',
+                  style: 'tableBody',
+                  border: [false, false, false, false],
+                  margin: [0, 5, 0, 5],
+                  ...(index % 2 && { fillColor: '#E0EFF6' }),
+                  ...(!cell3 && { color: '#7c98b6' })
+                },
+                {
+                  text: cell4 || '$0.00',
+                  style: 'tableBody',
+                  border: [false, false, false, false],
+                  margin: [0, 5, 0, 5],
+                  ...(index % 2 && { fillColor: '#E0EFF6' }),
+                  ...(!cell4 && { color: '#7c98b6' })
+                }
+              ])
             ]
           }
         },
@@ -270,7 +224,7 @@ export class InvoicePDFService {
                       [{ text: 'Notes:', style: 'normal', bold: true }],
                       [
                         {
-                          text: notes ? notes : '',
+                          text: notes,
                           style: 'normal',
                           bold: true,
                           color: 'black'
@@ -289,7 +243,7 @@ export class InvoicePDFService {
                     body: [
                       [
                         {
-                          text: 'Subtotal:',
+                          text: amountHeaders[0],
                           style: 'normal',
                           bold: true,
                           border: [false, false, false, false]
@@ -311,7 +265,7 @@ export class InvoicePDFService {
                       ],
                       [
                         {
-                          text: 'Tax:',
+                          text: amountHeaders[2],
                           style: 'normal',
                           bold: true,
                           border: [false, false, false, false]
@@ -333,7 +287,7 @@ export class InvoicePDFService {
                       ],
                       [
                         {
-                          text: 'Discount:',
+                          text: amountHeaders[3],
                           style: 'normal',
                           bold: true,
                           border: [false, false, false, true]
@@ -355,7 +309,7 @@ export class InvoicePDFService {
                       ],
                       [
                         {
-                          text: 'Total:',
+                          text: amountHeaders[4],
                           style: 'normal',
                           bold: true,
                           border: [false, false, false, false]

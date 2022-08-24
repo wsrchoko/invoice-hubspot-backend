@@ -22,63 +22,66 @@ import {
 
 export class Invoice {
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly logo: string;
 
+
+  @IsArray()
+  @ApiProperty()
+  @ArrayMinSize(3)
+  @ArrayMaxSize(3)
+  readonly dateHeaders: string[];
+
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly no: string;
 
   @IsDate()
-  @IsOptional()
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly date: Date;
 
   @IsDate()
-  @IsOptional()
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly dueDate: Date;
 
   @IsArray()
   @ApiProperty()
   @ArrayMinSize(4)
   @ArrayMaxSize(4)
-  readonly headers: string[];
+  readonly itemsHeaders: string[];
 
   @IsArray()
-  @IsOptional()
   @Type(() => Item)
   @ValidateNested({ each: true })
   @ApiProperty({ type: () => [Item], required: false })
   readonly items: ItemType[];
 
+  @IsArray()
+  @ApiProperty()
+  @ArrayMinSize(4)
+  @ArrayMaxSize(4)
+  readonly amountHeaders: string[];
+
   @IsNumber()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly subtotal: number;
 
   @IsNumber()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly tax: number;
 
   @IsNumber()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly discount: number;
 
   @IsNumber()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly total: number;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly notes: string;
 
   @IsObject()
@@ -88,7 +91,6 @@ export class Invoice {
   readonly yourCompany: YourCompanyType;
 
   @IsObject()
-  @IsOptional()
   @Type(() => ClientCompany)
   @ApiProperty({ type: () => ClientCompany, required: false })
   readonly clientCompany: ClientCompanyType;
@@ -111,18 +113,15 @@ export class YourCompany {
   readonly website: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly address: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly city: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly country: string;
 
   @IsNumber()
@@ -138,50 +137,41 @@ export class YourCompany {
 
 export class ClientCompany {
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly company: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly fullName: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly address: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly city: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly country: string;
 }
 
 export class Item {
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly cell1: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly cell2: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly cell3: string;
 
   @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   readonly cell4: string;
 }
 
