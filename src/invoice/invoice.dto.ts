@@ -37,11 +37,13 @@ export class Invoice {
   readonly no: string;
 
   @IsDate()
+  @IsOptional()
   @Type(() => Date)
   @ApiProperty()
   readonly date: Date;
 
   @IsDate()
+  @IsOptional()
   @Type(() => Date)
   @ApiProperty()
   readonly dueDate: Date;
