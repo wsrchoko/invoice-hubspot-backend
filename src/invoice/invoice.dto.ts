@@ -25,7 +25,6 @@ export class Invoice {
   @ApiProperty()
   readonly logo: string;
 
-
   @IsArray()
   @ApiProperty()
   @ArrayMinSize(3)
@@ -39,13 +38,13 @@ export class Invoice {
   @IsDate()
   @IsOptional()
   @Type(() => Date)
-  @ApiProperty()
+  @ApiProperty({ required: false })
   readonly date: Date;
 
   @IsDate()
   @IsOptional()
   @Type(() => Date)
-  @ApiProperty()
+  @ApiProperty({ required: false })
   readonly dueDate: Date;
 
   @IsArray()
